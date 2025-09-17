@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Słownik Scrabble</string>
+    <string name="button_check">Sprawdź</string>
+    <string name="button_check_in_sjp">Wyszukaj w SJP</string>
+    <string name="word_not_checked_yet">słowo jeszcze niesprawdzone</string>
+    <string name="word_correct">słowo poprawne</string>
+    <string name="word_incorrect">słowo niepoprawne</string>
+    <string name="icon_clear">Wyczyść</string>
+    <string name="request_error_message">Wystąpił błąd podczas pobierania danych.</string>
+    <string name="request_error_title">Błąd</string>
+    <string name="ok">OK</string>
+    <string name="request_error_details">Szczegóły:</string>
+</resources>
