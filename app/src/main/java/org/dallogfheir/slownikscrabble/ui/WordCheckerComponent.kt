@@ -56,7 +56,7 @@ fun WordChecker(modifier: Modifier) {
                 strokeWidth = Constants.progressIndicatorStrokeWidth
             )
         } else {
-            Tile(viewModel.wordToCheck, viewModel.checkStatus)
+            Tile()
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(
