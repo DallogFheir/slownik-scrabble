@@ -1,20 +1,25 @@
 package org.dallogfheir.slownikscrabble.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import org.dallogfheir.slownikscrabble.R
 import org.dallogfheir.slownikscrabble.constants.Constants
 import org.dallogfheir.slownikscrabble.constants.TileConstants
 import org.dallogfheir.slownikscrabble.constants.WordStatus
+import org.dallogfheir.slownikscrabble.utils.openWordInSjpInContext
 
 @Composable
-fun Tile(wordStatus: WordStatus) {
+fun Tile(wordToCheck: String, wordStatus: WordStatus) {
+    val context = LocalContext.current
+
     val (stringId, tileId, tintColor) = when (wordStatus) {
         WordStatus.NOT_CHECKED_YET -> Triple(
             R.string.word_not_checked_yet,
@@ -42,6 +47,12 @@ fun Tile(wordStatus: WordStatus) {
         colorFilter = ColorFilter.tint(tintColor),
         modifier = Modifier
             .size(Constants.tileSize)
-
+            .combinedClickable(
+                enabled = wordToCheck.isNotEmpty(),
+                onClick = {},
+                onLongClick = {
+                    openWordInSjpInContext(wordToCheck, context)
+                }
+            )
     )
 }
