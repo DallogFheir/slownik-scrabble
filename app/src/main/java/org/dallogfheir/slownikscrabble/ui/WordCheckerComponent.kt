@@ -12,9 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.OpenInBrowser
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,34 +21,33 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.dallogfheir.slownikscrabble.R
 import org.dallogfheir.slownikscrabble.constants.Constants
+import org.dallogfheir.slownikscrabble.constants.Constants.checkInSJPTextAlpha
+import org.dallogfheir.slownikscrabble.constants.Constants.checkInSJPTextPadding
 import org.dallogfheir.slownikscrabble.ui.components.ErrorDialog
 import org.dallogfheir.slownikscrabble.ui.components.Tile
-import org.dallogfheir.slownikscrabble.utils.openWordInSjpInContext
 import org.dallogfheir.slownikscrabble.viewModels.WordCheckerViewModel
 
 @Composable
 fun WordChecker(modifier: Modifier) {
     val viewModel: WordCheckerViewModel = viewModel()
 
-    val context = LocalContext.current
-
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val wordToCheck = viewModel.wordToCheck
     val wordToCheckUppercase = viewModel.wordToCheckUppercase
 
     val clearText = stringResource(id = R.string.icon_clear)
     val checkText = stringResource(id = R.string.button_check).uppercase(Constants.polishLocale)
     val checkInSjpText =
-        stringResource(id = R.string.button_check_in_sjp).uppercase(Constants.polishLocale)
+        stringResource(id = R.string.info_check_in_sjp)
 
     val content: @Composable () -> Unit = {
         if (viewModel.isLoading) {
@@ -59,7 +56,7 @@ fun WordChecker(modifier: Modifier) {
                 strokeWidth = Constants.progressIndicatorStrokeWidth
             )
         } else {
-            Tile(viewModel.checkStatus)
+            Tile()
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(
@@ -95,20 +92,13 @@ fun WordChecker(modifier: Modifier) {
                 ) {
                     Text(checkText)
                 }
-                Button(
-                    onClick = {
-                        openWordInSjpInContext(wordToCheck, context)
-                    },
-                    colors = ButtonDefaults.outlinedButtonColors(),
-                    enabled = viewModel.shouldButtonsBeEnabled
-                ) {
-                    Icon(
-                        Icons.Filled.OpenInBrowser,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = Constants.checkInSJPIconMargin)
-                    )
-                    Text(checkInSjpText)
-                }
+                Text(
+                    checkInSjpText,
+                    modifier = Modifier
+                        .alpha(checkInSJPTextAlpha)
+                        .padding(checkInSJPTextPadding),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
