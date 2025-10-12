@@ -5,34 +5,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.dallogfheir.slownikscrabble.R
 import org.dallogfheir.slownikscrabble.constants.Constants
-import org.dallogfheir.slownikscrabble.constants.Constants.checkInSJPTextAlpha
-import org.dallogfheir.slownikscrabble.constants.Constants.checkInSJPTextPadding
+import org.dallogfheir.slownikscrabble.ui.components.CheckForm
 import org.dallogfheir.slownikscrabble.ui.components.ErrorDialog
-import org.dallogfheir.slownikscrabble.ui.components.Tile
 import org.dallogfheir.slownikscrabble.viewModels.WordCheckerViewModel
 
 @Composable
@@ -42,92 +24,35 @@ fun WordChecker(modifier: Modifier) {
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val wordToCheckUppercase = viewModel.wordToCheckUppercase
-
-    val clearText = stringResource(id = R.string.icon_clear)
-    val checkText = stringResource(id = R.string.button_check).uppercase(Constants.polishLocale)
-    val checkInSjpText =
-        stringResource(id = R.string.info_check_in_sjp)
-
-    val content: @Composable () -> Unit = {
-        if (viewModel.isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(Constants.tileSize),
-                strokeWidth = Constants.progressIndicatorStrokeWidth
-            )
-        } else {
-            Tile()
-
-            Column(
-                verticalArrangement = Arrangement.spacedBy(
-                    Constants.mainColumnGap,
-                    Alignment.CenterVertically
-                ),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                TextField(
-                    value = wordToCheckUppercase,
-                    onValueChange = {
-                        viewModel.updateWordToCheck(it)
-                    },
-                    trailingIcon = {
-                        if (wordToCheckUppercase.isNotEmpty()) {
-                            IconButton(onClick = { viewModel.clearWordToCheck() }) {
-                                Icon(Icons.Filled.Clear, contentDescription = clearText)
-                            }
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            viewModel.checkWord()
-                        }
-                    )
-                )
-                Button(
-                    onClick = { viewModel.checkWord() },
-                    enabled = viewModel.shouldButtonsBeEnabled
-                ) {
-                    Text(checkText)
-                }
-                Text(
-                    checkInSjpText,
-                    modifier = Modifier
-                        .alpha(checkInSJPTextAlpha)
-                        .padding(checkInSJPTextPadding),
-                    textAlign = TextAlign.Center
-                )
-            }
-        }
-    }
-
     if (isLandscape) {
         Row(
             modifier = modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(
-                Constants.mainRowGap,
-                Alignment.CenterHorizontally
-            ),
+                .fillMaxSize(),
+            horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            content()
+            CheckForm(
+                viewModel = viewModel,
+                spacerModifier = Modifier.weight(Constants.SPACER_WEIGHT),
+                tileModifier = Modifier.weight(Constants.TILE_WEIGHT),
+                contentModifier = Modifier.weight(Constants.CONTENT_WEIGHT),
+                progressIndicatorModifier = Modifier.fillMaxHeight(Constants.PROGRESS_INDICATOR_WEIGHT)
+            )
         }
     } else {
         Column(
             modifier = modifier
-                .fillMaxHeight()
-                .fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(
-                Constants.mainColumnGap,
-                Alignment.CenterVertically
-            ),
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            content()
+            CheckForm(
+                viewModel = viewModel,
+                spacerModifier = Modifier.weight(Constants.SPACER_WEIGHT),
+                tileModifier = Modifier.weight(Constants.TILE_WEIGHT),
+                contentModifier = Modifier.weight(Constants.CONTENT_WEIGHT),
+                progressIndicatorModifier = Modifier.fillMaxWidth(Constants.PROGRESS_INDICATOR_WEIGHT)
+            )
         }
     }
     ErrorDialog(

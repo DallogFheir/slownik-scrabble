@@ -3,7 +3,7 @@ package org.dallogfheir.slownikscrabble.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -11,7 +11,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import org.dallogfheir.slownikscrabble.R
 import org.dallogfheir.slownikscrabble.constants.Constants
 import org.dallogfheir.slownikscrabble.constants.TileConstants
@@ -20,9 +19,7 @@ import org.dallogfheir.slownikscrabble.utils.openWordInSjpInContext
 import org.dallogfheir.slownikscrabble.viewModels.WordCheckerViewModel
 
 @Composable
-fun Tile() {
-    val viewModel: WordCheckerViewModel = viewModel()
-
+fun Tile(viewModel: WordCheckerViewModel, modifier: Modifier) {
     val context = LocalContext.current
 
     val (stringId, tileId, tintColor) = when (viewModel.checkStatus) {
@@ -50,8 +47,8 @@ fun Tile() {
         painter = painterResource(id = tileId),
         contentDescription = text,
         colorFilter = ColorFilter.tint(tintColor),
-        modifier = Modifier
-            .size(Constants.tileSize)
+        modifier = modifier
+            .fillMaxSize(Constants.CONTENT_MAX_SIZE_WEIGHT)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = {
